@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "fastgraph"
+name = "agentSerpWorker"
 version = "0.1.0"
-description = "a demo for making a AI search engine using fasthtml and langgraph"
+description = "a serp worker build with langgraph and notion api"
 authors = ["Frank Lin <etrobot@outlook.com>"]
 readme = "README.md"
 
@@ -10,12 +10,11 @@ python = "^3.10"
 langgraph = "^0.2.14"
 python-dotenv = "^1.0.1"
 langchain-openai = "^0.1.23"
-duckduckgo-search = "^6.2.11"
 notion-client = "^2.2.1"
-python-fasthtml = "^0.5.1"
 langgraph-checkpoint-sqlite = "^1.0.3"
 shortuuid = "^1.0.13"
 aiosqlite = "^0.20.0"
+langchain-community = "^0.2.16"
 
 
 [build-system]

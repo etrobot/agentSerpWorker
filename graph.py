@@ -2,14 +2,10 @@ from typing import Annotated
 from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START,END
 from langgraph.graph.message import add_messages
-from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
-import aiosqlite
 from agents import planner,decision_maker
 from tools import serp
 import dotenv
 dotenv.load_dotenv()
-
-
 
 def getAgent():
     class State(TypedDict):
@@ -56,9 +52,7 @@ def getAgent():
     graph_builder.add_edge("serpTool", "decisionNode")
     graph_builder.add_conditional_edges("decisionNode", should_loop)
 
-    conn = aiosqlite.connect('database/checkpoint.db', check_same_thread=False)
-    memory = AsyncSqliteSaver(conn)
-    app = graph_builder.compile(checkpointer=memory)
+    app = graph_builder.compile()
     return app
 
 if __name__ == "__main__":
