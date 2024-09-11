@@ -13,7 +13,7 @@ planned search keyword groups was this:
 You have currently finish the search with "{current_plan}", the search results are here:
 {past_steps}
 
-If no more search are needed and you can summarize the data and make a final answer, finally end with {finishWord}. \
+If no more search are needed and you can summarize the data and make a final answer beginned with a # title, finally end with {finishWord}. \
 Otherwise, output the next keyword group in the last line with this format:
 {shouldLoopWord} next keywords group here" \
 """
