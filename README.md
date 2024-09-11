@@ -19,6 +19,8 @@ graph TD;
 	decisionNode -.-> serpTool;
 	decisionNode -.-> __end__;	
 ```
+![image](https://github.com/user-attachments/assets/c06a63a7-fa9b-4e6c-84d1-254e7f4664c4)
+
 ## Usage
 
 1. Copy .env_example to .env and fill out the necessary information.
