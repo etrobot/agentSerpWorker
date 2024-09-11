@@ -93,6 +93,10 @@ class NotionMarkdownManager:
             content += self.parse_block(block)
         return content
 
+    import re
+
+    import re
+
     def markdown_to_notion_blocks(self, md_text):
         def create_heading_1(text):
             return {
@@ -148,15 +152,6 @@ class NotionMarkdownManager:
                 }
             }
 
-        def create_paragraph(text):
-            return {
-                "object": "block",
-                "type": "paragraph",
-                "paragraph": {
-                    "rich_text": [{"type": "text", "text": {"content": text}}]
-                }
-            }
-
         def create_link(text, href):
             return {
                 "type": "text",
@@ -167,24 +162,50 @@ class NotionMarkdownManager:
             }
 
         def parse_paragraph(text):
-            # 使用正则表达式查找所有的 [text](url) 形式的字符串
-            pattern = re.compile(r'\[([^\]]+)\]\((http[^\)]+)\)')
-
+            # Patterns to match Markdown-style links and bold text
+            link_pattern = re.compile(r'\[([^\]]+)\]\((http[^\)]+)\)')
             rich_text = []
             last_end = 0
+            seen_links = set()  # To keep track of seen links and avoid duplicates
 
-            for match in pattern.finditer(text):
-                start, end = match.span()
-                if start > last_end:
-                    # 处理普通文本部分
-                    rich_text.append({"type": "text", "text": {"content": text[last_end:start]}})
-                # 处理超链接部分
+            # First, handle the links, removing <b> tags and other HTML tags from the link text
+            matches = []
+            for match in link_pattern.finditer(text):
                 link_text, link_url = match.groups()
-                rich_text.append(create_link(link_text, link_url))
+                # Remove HTML tags from the link text, including <b> tags
+                cleaned_link_text = re.sub(r'<[^>]+>', '', link_text)
+                if link_url not in seen_links:  # Check if the link is already processed
+                    matches.append((match.start(), match.end(), "link", cleaned_link_text, link_url))
+                    seen_links.add(link_url)  # Mark this link as seen
+
+            bold_pattern = re.compile(r'<b>([^<]+)</b>')
+            # Then handle bold tags and other matches
+            # for match in bold_pattern.finditer(text):
+            #     matches.append((match.start(), match.end(), "bold", match.group(1)))
+
+            # Sort all matches by their start position
+            matches = sorted(matches, key=lambda m: m[0])
+
+            for match in matches:
+                start, end, match_type = match[:3]
+
+                # Add plain text before the match
+                if start > last_end:
+                    rich_text.append({"type": "text", "text": {"content": text[last_end:start]}})
+
+                if match_type == "link":
+                    # Link: clean text and add as a link
+                    cleaned_link_text, link_url = match[3], match[4]
+                    rich_text.append(create_link(cleaned_link_text, link_url))
+                elif match_type == "bold":
+                    # Bold text: add with bold annotation
+                    bold_text = match[3]
+                    rich_text.append({"type": "text", "text": {"content": bold_text}, "annotations": {"bold": True}})
+
                 last_end = end
 
+            # Add any remaining text after the last match
             if last_end < len(text):
-                # 处理剩余的普通文本部分
                 rich_text.append({"type": "text", "text": {"content": text[last_end:]}})
 
             return {"object": "block", "type": "paragraph", "paragraph": {"rich_text": rich_text}}

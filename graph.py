@@ -23,7 +23,7 @@ def getAgent():
 
     def toolNode(state: State):
         serp_response = serp.search(keywords=state['next_plan'])
-        past_steps = list({item['href']: item for item in state['past_steps'] + serp_response}.values())
+        past_steps = list({item['link']: item for item in state['past_steps'] + serp_response}.values())
         return {"past_steps":past_steps}
 
     def decisionNode(state: State):

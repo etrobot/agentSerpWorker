@@ -1,0 +1,8 @@
+langgraph
+python-dotenv
+langchain-openai
+notion-client
+langgraph-checkpoint-sqlite
+shortuuid
+aiosqlite
+langchain-community
