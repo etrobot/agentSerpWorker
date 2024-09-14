@@ -30,7 +30,7 @@ while True:
                 past_steps = [{'title':articleContent,'link':links[0],'snippet':prompt}]
             msg=[{'role':'user','content':articleContent}]
             lgraph = getAgent().invoke({"messages": msg, "past_steps": past_steps},{"recursion_limit": 10},debug=True)
-            answer = lgraph['messages'][-1]['content']+'\nRef\n'+serp.serpResult2md(lgraph['past_steps'])
+            answer = lgraph['messages'][-1].content+'\nRef\n'+serp.serpResult2md(lgraph['past_steps'])
             if len(answer)>300:
                 manager.update_markdown_to_notion(article["id"],answer,title=mission["name"])
                 logging.critical(f"Inserted: {article['id']}{mission['name']} ")

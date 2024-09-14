@@ -6,3 +6,4 @@ langgraph-checkpoint-sqlite
 shortuuid
 aiosqlite
 langchain-community
+libsql-experimental
