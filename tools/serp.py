@@ -7,7 +7,9 @@ def clean_title(text):
     text = re.sub('<.*?>', '', text)
     # 去除特殊符号，只保留字母、数字和空格
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
-    # 去除多余的空格
+    # 去除多余的空格，将多个空格替换为单个空格
+    text = re.sub(r'\s+', ' ', text)
+    # 去除首尾空格
     text = text.strip()
     return text
 def search(keywords: str) -> list:
